@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"fmt"
 	"html/template"
 	"log"
@@ -15,6 +16,9 @@ import (
 	"golang.org/x/oauth2/google"
 )
 
+//go:embed templates/*
+var templatesFS embed.FS
+
 var (
 	templates *template.Template
 	appConfig *config.Config
@@ -24,7 +28,7 @@ func main() {
 	appConfig = config.LoadConfig()
 
 	// Parse templates
-	templates = template.Must(template.ParseGlob("templates/*.html"))
+	templates = template.Must(template.ParseFS(templatesFS, "templates/*.html"))
 	auth.InitTemplates(templates)
 
 	// OAuth2 configs
